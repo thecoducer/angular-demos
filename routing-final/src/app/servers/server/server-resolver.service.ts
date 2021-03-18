@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { ServersService } from '../servers.service';
 
 interface Server {
-  id: number;
+  id: number; 
   name: string;
   status: string;
 }
