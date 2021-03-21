@@ -16,6 +16,7 @@ export class EditServerComponent implements OnInit, CanComponentDeactivate {
   serverStatus = '';
   allowEdit = false;
   changesSaved = false;
+  newId: number;
 
   constructor(private serversService: ServersService,
               private route: ActivatedRoute,
@@ -35,6 +36,7 @@ export class EditServerComponent implements OnInit, CanComponentDeactivate {
     const id = +this.route.snapshot.params['id'];
     this.server = this.serversService.getServer(id);
     // Subscribe route params to update the id if params change
+    // ???
     this.serverName = this.server.name;
     this.serverStatus = this.server.status;
   }
