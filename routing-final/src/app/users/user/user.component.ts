@@ -14,10 +14,13 @@ export class UserComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    // the state of the user variable needs to be initialized
+    // since we have binded it for string interpolation
     this.user = {
       id: this.route.snapshot.params['id'],
       name: this.route.snapshot.params['name']
     };
+
     this.paramsSubscription = this.route.params
       .subscribe(
         (params: Params) => {
