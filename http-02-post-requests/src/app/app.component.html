@@ -28,8 +28,15 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-12 col-md-6 col-md-offset-3">
-            <p>No posts available!</p>
+        <div class="">
+            <h3 *ngIf="!postsAvailable()" && !isFetching>No posts available!</h3>
+            <ul class="list-group" *ngIf="postsAvailable() && !isFetching">
+                <li class="list-group-item" *ngFor="let post of loadedPosts">
+                    <h3>{{post.title}}</h3>
+                    <p>{{post.content}}</p>
+                </li>
+            </ul>
+            <h3 *ngIf="isFetching">Loading...</h3>
         </div>
     </div>
 </div>
