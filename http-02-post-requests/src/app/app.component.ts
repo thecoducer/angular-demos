@@ -1,64 +1,52 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators'
-import { Post } from './post.model';
+import { Component, OnInit } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Post } from "./post.model";
+import { PostsService } from "./posts.service";
+import { NgForm } from "@angular/forms";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"],
 })
 export class AppComponent implements OnInit {
   loadedPosts: Post[] = [];
   isFetching: boolean = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private postsService: PostsService) {}
 
   ngOnInit() {
-    this.fetchPosts();
+    this.getPosts();
   }
 
-  onCreatePost(postData: { title: string; content: string }) {
-    // Send Http request
-    this.http
-      .post<{ name: string }>(
-        'https://ng-complete-guide-32959-default-rtdb.firebaseio.com/posts.json',
-        postData
-      )
-      .subscribe(responseData => {
-        console.log(responseData);
-      });
+  // method binded to send post button in html
+  onCreatePost(postForm: NgForm) {
+    const postData = postForm.value;
+    this.postsService.createAndStorePost(postData.title, postData.content);
+    postForm.reset();
   }
 
+  // method binded to fetch posts button in html
   onFetchPosts() {
-    this.fetchPosts();
+    this.getPosts();
   }
 
-  private fetchPosts() {
+  // method to get posts
+  // receives an observable from the PostsService
+  // here we subscribe to it and get the posts data
+  private getPosts() {
     this.isFetching = true;
-    
-    this.http
-    .get<{ [key: string]: Post }>('https://ng-complete-guide-32959-default-rtdb.firebaseio.com/posts.json')
-    .pipe(
-      map(responseData => {
-        const postsArray: Post[] = [];
-        for(const key in responseData) {
-          if(responseData.hasOwnProperty(key)) {
-            postsArray.push({...responseData[key], id: key});
-          }
-        }
-        return postsArray;
-      })
-    )
-    .subscribe(posts => {
-      //console.log(posts);
+    this.postsService.fetchPosts().subscribe( posts => {
       this.isFetching = false;
       this.loadedPosts = posts;
     })
   }
 
+  // method binded to clear posts button in html
   onClearPosts() {
-    // Send Http request
+    this.postsService.deletePosts().subscribe(() => {
+      this.loadedPosts = [];
+    });
   }
 
   postsAvailable() {
