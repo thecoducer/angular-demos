@@ -48,4 +48,5 @@ export class PostsService {
   deletePosts() {
       return this.http.delete(FirebaseAPI.getAPIEndpoint());
   }
+  
 }

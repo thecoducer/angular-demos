@@ -39,6 +39,7 @@ export class AppComponent implements OnInit {
     this.postsService.fetchPosts().subscribe( posts => {
       this.isFetching = false;
       this.loadedPosts = posts;
+      console.log(posts);
     })
   }
 
@@ -49,6 +50,7 @@ export class AppComponent implements OnInit {
     });
   }
 
+  // check whether posts available or not
   postsAvailable() {
     return this.loadedPosts.length > 0;
   }
