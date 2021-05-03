@@ -11,8 +11,12 @@
                     <textarea class="form-control" id="content" required ngModel name="content"></textarea>
                 </div>
                 <button class="btn btn-primary" type="submit" [disabled]="!postForm.valid">
-          Send Post
-        </button>
+                    Send Post
+                </button>
+
+                <div *ngIf="postError" class="alert alert-danger" role="alert" style="margin-top: 20px;">
+                    <strong>{{postError}}</strong>
+                </div>
             </form>
         </div>
     </div>
@@ -22,7 +26,7 @@
             <button class="btn btn-primary" (click)="onFetchPosts()">
         Fetch Posts
       </button> |
-            <button class="btn btn-danger" [disabled]="loadedPosts.length < 1" (click)="onClearPosts()">
+            <button class="btn btn-danger" [disabled]="!postsAvailable()" (click)="onClearPosts()">
         Clear Posts
       </button>
         </div>
@@ -36,7 +40,10 @@
                     <p>{{post.content}}</p>
                 </li>
             </ul>
-            <h3 *ngIf="isFetching">Loading...</h3>
+            <h3 *ngIf="isFetching && !fetchError">Loading...</h3>
+            <div *ngIf="fetchError" class="alert alert-danger" role="alert">
+                <strong>{{fetchError}}</strong>
+            </div>
         </div>
     </div>
 </div>
