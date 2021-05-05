@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Component } from "@angular/core";
+import { NgForm } from "@angular/forms";
+import { Router } from "@angular/router";
+import { Observable } from "rxjs";
 
-import { AuthService, AuthResponseData } from './auth.service';
+import { AuthService, AuthResponseData } from "./auth.service";
 
 @Component({
-  selector: 'app-auth',
-  templateUrl: './auth.component.html'
+  selector: "app-auth",
+  templateUrl: "./auth.component.html",
 })
 export class AuthComponent {
   isLoginMode = true;
@@ -37,13 +37,17 @@ export class AuthComponent {
       authObs = this.authService.signup(email, password);
     }
 
+    // "don't repeat yourself" rule applied here
+    // either login or signup will send an abservable
+    // that gets stored in authObs
+    // and we subscribe to it here
     authObs.subscribe(
-      resData => {
+      (resData) => {
         console.log(resData);
         this.isLoading = false;
-        this.router.navigate(['/recipes']);
+        this.router.navigate(["/recipes"]);
       },
-      errorMessage => {
+      (errorMessage) => {
         console.log(errorMessage);
         this.error = errorMessage;
         this.isLoading = false;
